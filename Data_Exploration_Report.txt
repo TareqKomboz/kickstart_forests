@@ -1,0 +1,22 @@
+# Data Exploration Report
+
+## Introduction
+This report is based on the initial exploration of a dataset related to tree species and their characteristics. The data includes variables such as tree species, identifiers, and various measurements.
+
+## Data Cleaning
+- **Tree Species**: The tree species variable was dropped from the dataset. The reason for this is not specified in the notes, but it could be due to irrelevance to the model, high cardinality, or other reasons.
+- **ID**: The ID variable should be removed for later training as it can lead to unwanted overfitting to the ordering of the data.
+
+## Data Scaling
+- It was determined that scaling was not necessary for this dataset. This is because the variables are already on a similar scale.
+
+## Variable Correlations
+- **Sentinel_2A_740.5 - 864.7**: This variable has a high correlation of 0.6 with the Leaf Area Index (LAI). This suggests that this variable could be a good predictor for LAI.
+- **w728 - w1128**: This variable has an even higher correlation of 0.75 with LAI, indicating it could be an even stronger predictor.
+
+## Questions Raised
+- **Difference between Sentinel_2A and w**
+- **Functionality of pd.wide_to_long**
+
+## Conclusion
+This initial data exploration has provided valuable insights into the dataset and raised important questions for further investigation. The next steps could include a deeper exploration of the variables, feature engineering, and the development of predictive models.
