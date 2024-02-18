@@ -2,7 +2,18 @@
 from sklearn.model_selection import train_test_split
 from src.data import Dataset, COL_LAI, COL_SPECIES, COL_WETNESS, COLS_SENTINEL
 from src.model_factory import ModelFactory
+from src.features import FeaturePipelineFactory
 import numpy as np
+from logging import getLogger, StreamHandler, INFO, FileHandler
+import logging
+
+
+logger = getLogger()
+logger.addHandler(FileHandler("experiment.log"))
+logger.setLevel(INFO)
+f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger.handlers[0].setFormatter(f_format)
+
 
 def main():    
     # load data
@@ -16,26 +27,29 @@ def main():
     # val set
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42, shuffle=True)
 
-    # define models to be evaluated
-    # these models are evaluated on all 12 features, we later want to refactor to have feature registry,
-    # so that we can evaluate models on different feature sets and on differnet feature engineering such as 
-    # exponential transformation of satellite data, or concatenation of species and satellite data
     models = [
-        ModelFactory.create_linear_regression_orig(),
-        ModelFactory.create_polynomial_regression_orig(),
-        ModelFactory.create_random_forest_orig(),
-        ModelFactory.create_xgboost_orig(),
-        ModelFactory.create_MLP_orig(),   
+        ModelFactory.create_linear_regression_orig(feature_set=FeaturePipelineFactory.ALL_FEATURES),
+        ModelFactory.create_polynomial_regression_orig(feature_set=FeaturePipelineFactory.ALL_FEATURES),
+        ModelFactory.create_random_forest_orig(feature_set=FeaturePipelineFactory.ALL_FEATURES),
+        ModelFactory.create_xgboost_orig(feature_set=FeaturePipelineFactory.ALL_FEATURES),
+        ModelFactory.create_MLP_orig(feature_set=FeaturePipelineFactory.ALL_FEATURES),
+
+        ModelFactory.create_random_forest_orig(feature_set=FeaturePipelineFactory.SENTINEL_FEATURES),
+        ModelFactory.create_random_forest_orig(feature_set=FeaturePipelineFactory.SPECIES_SENTINEL_FEATURES),
+        ModelFactory.create_random_forest_orig(feature_set=FeaturePipelineFactory.WETNESS_SENTINEL_FEATURES),
+        ModelFactory.create_random_forest_orig(feature_set=FeaturePipelineFactory.ALL_EXP_FEATURES),
     ]
+
+    logger.info("Experiment started...")
+    logger.info(f"Number of models: {len(models)}")
 
     # evaluate models
     for model in models:
-        print(f"Evaluating model:\n{model}")
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-        print(f"Model score: {model.score(X_test, y_test)}")
-        print(f"Model mse: {np.mean((y_pred - y_test)**2)}")    
+        logger.info(f"Model: {model.named_steps['model'].__class__.__name__}, Feature set: {model.named_steps['preprocess'].__class__.__name__}")
 
+        model.fit(X_train, y_train)
+        
+        logger.info(f"Model score: {model.score(X_test, y_test)}")
 
 if __name__ == '__main__':
     main()
