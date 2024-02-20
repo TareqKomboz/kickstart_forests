@@ -29,6 +29,7 @@ class FeaturePipelineFactory:
     NUMERICAL_COLS = [COL_WETNESS] + COLS_SENTINEL
     CATEGORICAL_COLS = [COL_SPECIES]
 
+    # NOTE: feature_set uses an unspecified type; This is difficult to use. Use of en Enum would be recommended.
     @classmethod
     def get_feature_pipeline(cls, feature_set):
         if feature_set is None or feature_set == cls.ALL_FEATURES:
