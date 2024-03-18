@@ -14,7 +14,7 @@ from .features import FeaturePipelineFactory
 class ModelFactory:
 
     @classmethod
-    def create_linear_regression_orig(cls, feature_set=None):
+    def create_linear_regression(cls, feature_set=None):
         if feature_set is None:
             feature_set = FeaturePipelineFactory.ALL_FEATURES
         return Pipeline([
@@ -23,7 +23,7 @@ class ModelFactory:
         ])
     
     @classmethod
-    def create_polynomial_regression_orig(cls, feature_set=None):
+    def create_polynomial_regression(cls, feature_set=None):
         if feature_set is None:
             feature_set = FeaturePipelineFactory.ALL_FEATURES
         
@@ -34,7 +34,7 @@ class ModelFactory:
         ])
 
     @classmethod
-    def create_random_forest_orig(cls, feature_set=None):
+    def create_random_forest(cls, feature_set=None):
         if feature_set is None:
             feature_set = FeaturePipelineFactory.ALL_FEATURES
         return Pipeline([
@@ -44,7 +44,7 @@ class ModelFactory:
 
     
     @classmethod
-    def create_xgboost_orig(cls, feature_set=None):
+    def create_xgboost(cls, feature_set=None):
         if feature_set is None:
             feature_set = FeaturePipelineFactory.ALL_FEATURES
         return Pipeline([
@@ -54,7 +54,7 @@ class ModelFactory:
         ])
     
     @classmethod
-    def create_MLP_orig(cls, feature_set=None):
+    def create_MLP(cls, feature_set=None):
         if feature_set is None:
             feature_set = FeaturePipelineFactory.ALL_FEATURES
         return Pipeline([
